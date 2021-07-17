@@ -1,0 +1,22 @@
+
+note over browser:
+JS-code that was downloaded to the browser initially.
+When new data was submitted, JS code prevents redirecting
+the whole page. New data was pushed to the list of existing
+data and data was rendered locally, after that the new data
+was sent to the server
+end note
+
+
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over browser:
+Content-Type header contains the new note as 
+JSON-data:
+{
+    content: "SPA submits new note",
+    date: "2021-07-10T15:15:59.905Z"
+}
+end note
+
+server-->browser: HTTP status code 201 and a message response - {"message":"note created"} - in a JSON format
