@@ -5,7 +5,14 @@ const App = () => {
   const [newName, setNewName] = useState("");
 
   const handleNewName = (e) => {
-    setNewName(e.target.value);
+    const name = e.target.value;
+    const names = persons.map((person) => person.name);
+    for (var i = 0; i < names.length; i++) {
+      if (names[i] === name) {
+        window.alert(`${name} is already added to phonebook`);
+      }
+    }
+    setNewName(name);
   };
 
   const addName = (e) => {
