@@ -1,36 +1,41 @@
 import React, { useState } from "react";
+import Country from "./Country";
 
 const Countries = ({ countries, filtering }) => {
   const filteredCountries = countries.filter((country) =>
     country.name.toLowerCase().includes(filtering.toLowerCase())
   );
 
+  const [selectedCountry, setSelectedCountry] = useState();
+
+  const handleShowData = (filteredCountry) => {
+    setSelectedCountry(filteredCountry);
+    console.log(selectedCountry);
+  };
+
   return (
     <>
       {filteredCountries.length === 1 ? (
         filteredCountries.map((filteredCountry, i) => (
-          <div key={i}>
-            <h1>{filteredCountry.name} </h1>
-            <p> capital {filteredCountry.capital} </p>
-            <p> population {filteredCountry.population} </p>
-            <h3>languages</h3>
-            {filteredCountry.languages.map((language, index) => (
-              <ul key={index}>
-                <li>{language.name}</li>
-              </ul>
-            ))}
-            <img
-              src={filteredCountry.flag}
-              alt="flag"
-              width="150"
-              height="150"
-            ></img>
-          </div>
+          <Country key={i} filteredCountry={filteredCountry} />
         ))
       ) : filteredCountries.length > 1 && filteredCountries.length <= 10 ? (
-        filteredCountries.map((filteredCountry, x) => (
-          <p key={x}>{filteredCountry.name}</p>
-        ))
+        <div>
+          {filteredCountries.map((filteredCountry, x) => (
+            <div key={x}>
+              {filteredCountry.name}
+              <button
+                type="submit"
+                onClick={() => handleShowData(filteredCountry)}
+              >
+                show
+              </button>
+            </div>
+          ))}
+          {selectedCountry != null && (
+            <Country filteredCountry={selectedCountry} />
+          )}
+        </div>
       ) : (
         <p>Too many matches, specify another filter</p>
       )}
