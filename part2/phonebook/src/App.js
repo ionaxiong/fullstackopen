@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Filter from "./Components/Filter";
 import PersonForm from "./Components/PersonForm";
 import Persons from "./Components/Persons";
-import axios from 'axios';
+import personsService from "./Services/personsService";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,11 +11,10 @@ const App = () => {
   const [filtering, setFiltering] = useState("");
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-    .then(response => {
-      setPersons(response.data)
-    })
-  }, [])
+    personsService.getAll().then((persons) => {
+      setPersons(persons);
+    });
+  }, []);
 
   const handleFiltering = (e) => {
     setFiltering(e.target.value);
@@ -39,21 +38,27 @@ const App = () => {
     e.preventDefault();
     const infoObject = { name: newName, number: newNumber };
 
-    axios
-    .post('http://localhost:3001/persons', infoObject)
-    .then(response => {
-      setPersons(persons.concat(infoObject))
-      setNewName('')
-      setNewNumber('')
-    })
-    .catch(err => console.log(err))
+    personsService
+      .create(infoObject)
+      .then((newPerson) => {
+        setPersons(persons.concat(newPerson));
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <>
       <h2>Phonebook</h2>
       <Filter filtering={filtering} handleFiltering={handleFiltering} />
-      <PersonForm newName={newName} handleNewName={handleNewName} newNumber={newNumber} handleNewNumber={handleNewNumber} addInfo={(event) => addInfo(event)} />
+      <PersonForm
+        newName={newName}
+        handleNewName={handleNewName}
+        newNumber={newNumber}
+        handleNewNumber={handleNewNumber}
+        addInfo={(event) => addInfo(event)}
+      />
       <h2>Numbers</h2>
       <Persons persons={persons} filtering={filtering} />
     </>
