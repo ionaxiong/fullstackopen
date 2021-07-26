@@ -38,9 +38,15 @@ const App = () => {
   const addInfo = (e) => {
     e.preventDefault();
     const infoObject = { name: newName, number: newNumber };
-    setPersons(persons.concat(infoObject));
-    setNewName("");
-    setNewNumber("");
+
+    axios
+    .post('http://localhost:3001/persons', infoObject)
+    .then(response => {
+      setPersons(persons.concat(infoObject))
+      setNewName('')
+      setNewNumber('')
+    })
+    .catch(err => console.log(err))
   };
 
   return (
