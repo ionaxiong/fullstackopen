@@ -4,6 +4,7 @@ import PersonForm from "./Components/PersonForm";
 import Persons from "./Components/Persons";
 import personsService from "./Services/personsService";
 import Notification from "./Components/Notification";
+import Warning from "./Components/Warning";
 
 const App = () => {
   const [persons, setPersons] = useState([{ name: "", number: "" }]);
@@ -11,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filtering, setFiltering] = useState("");
   const [message, setMessage] = useState("");
+  const [warning, setWarning] = useState("");
 
   useEffect(() => {
     personsService
@@ -57,10 +59,10 @@ const App = () => {
           }
           return x;
         });
-        setMessage(`${newName}'s number is changed`)
+        setMessage(`${newName}'s number is changed`);
         setTimeout(() => {
-          setMessage(null)
-        }, 5000)
+          setMessage("");
+        }, 5000);
         setPersons(updatedPersons);
         updateNumber(existingPerson.id, existingPerson);
       }
@@ -69,15 +71,14 @@ const App = () => {
         .create(infoObject)
         .then((newPerson) => {
           setPersons(persons.concat(newPerson));
-          setMessage(`Added ${newPerson.name}`)
+          setMessage(`Added ${newPerson.name}`);
           setTimeout(() => {
-            setMessage(null)
-          }, 5000)
+            setMessage("");
+          }, 5000);
           setNewName("");
           setNewNumber("");
         })
-        .catch((err) => 
-        console.log(err));
+        .catch((err) => console.log(err));
     }
   };
 
@@ -86,13 +87,23 @@ const App = () => {
     window.confirm(`Delete ${deletedName} ?`) &&
       personsService
         .remove(id)
-        .then(setPersons(persons.filter((person) => person.id !== id)));
+        .then(setPersons(persons.filter((person) => person.id !== id)))
+        .catch((err) => {
+          setWarning(
+            `Information of ${deletedName} has already been removed from server`
+          );
+          setTimeout(() => {
+            setWarning("");
+          }, 5000);
+          console.log(err);
+        });
   };
 
   return (
     <>
       <h2>Phonebook</h2>
       <Notification message={message} />
+      <Warning warning={warning} />
       <Filter filtering={filtering} handleFiltering={handleFiltering} />
       <h2>add a new</h2>
       <PersonForm
