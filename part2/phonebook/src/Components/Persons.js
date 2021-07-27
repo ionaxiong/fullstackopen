@@ -7,7 +7,10 @@ const Persons = ({ persons, filtering, handleDeletePerson }) => {
         ? persons.map((person) => (
             <p key={person.name}>
               {person.name} {person.number}
-              <button type="submit" onClick={() => handleDeletePerson(person.id)}>
+              <button
+                type="submit"
+                onClick={() => handleDeletePerson(person.id)}
+              >
                 delete
               </button>
             </p>
@@ -19,6 +22,12 @@ const Persons = ({ persons, filtering, handleDeletePerson }) => {
             .map((person) => (
               <p key={person.name}>
                 {person.name} {person.number}
+                <button
+                  type="submit"
+                  onClick={() => handleDeletePerson(person.id)}
+                >
+                  delete
+                </button>
               </p>
             ))}
     </>
