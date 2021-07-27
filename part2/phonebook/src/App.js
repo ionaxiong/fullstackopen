@@ -5,7 +5,7 @@ import Persons from "./Components/Persons";
 import personsService from "./Services/personsService";
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState([{ name: "", number: "" }]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filtering, setFiltering] = useState("");
@@ -25,9 +25,6 @@ const App = () => {
 
   const handleNewName = (e) => {
     const name = e.target.value;
-    if (persons.find((x) => x.name === name)) {
-      window.alert(`${name} is already added to phonebook`);
-    }
     setNewName(name);
   };
 
@@ -36,18 +33,41 @@ const App = () => {
     setNewNumber(number);
   };
 
+  const updateNumber = (id, newPerson) => {
+    personsService.update(id, newPerson);
+  };
+
   const addInfo = (e) => {
     e.preventDefault();
     const infoObject = { name: newName, number: newNumber };
 
-    personsService
-      .create(infoObject)
-      .then((newPerson) => {
-        setPersons(persons.concat(newPerson));
-        setNewName("");
-        setNewNumber("");
-      })
-      .catch((err) => console.log(err));
+    const existingPerson = persons.find((x) => x.name === newName);
+    if (existingPerson) {
+      const confirm = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      );
+      if (confirm) {
+        existingPerson.number = newNumber;
+        const updatedPersons = [...persons];
+        updatedPersons.map((x) => {
+          if (x.name === newName) {
+            x.number = newNumber;
+          }
+          return x;
+        });
+        setPersons(updatedPersons);
+        updateNumber(existingPerson.id, existingPerson);
+      }
+    } else {
+      personsService
+        .create(infoObject)
+        .then((newPerson) => {
+          setPersons(persons.concat(newPerson));
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   const handleDeletePerson = (id) => {
