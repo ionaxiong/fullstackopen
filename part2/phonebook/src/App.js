@@ -11,14 +11,16 @@ const App = () => {
   const [filtering, setFiltering] = useState("");
 
   useEffect(() => {
-    personsService.getAll().then((persons) => {
-      setPersons(persons);
-    });
+    personsService
+      .getAll()
+      .then((persons) => {
+        setPersons(persons);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const handleFiltering = (e) => {
     setFiltering(e.target.value);
-    console.log(e.target.value);
   };
 
   const handleNewName = (e) => {
@@ -48,10 +50,19 @@ const App = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleDeletePerson = (id) => {
+    const deletedName = persons.find((person) => person.id === id).name;
+    window.confirm(`Delete ${deletedName} ?`) &&
+      personsService
+        .remove(id)
+        .then(setPersons(persons.filter((person) => person.id !== id)));
+  };
+
   return (
     <>
       <h2>Phonebook</h2>
       <Filter filtering={filtering} handleFiltering={handleFiltering} />
+      <h2>add a new</h2>
       <PersonForm
         newName={newName}
         handleNewName={handleNewName}
@@ -60,7 +71,11 @@ const App = () => {
         addInfo={(event) => addInfo(event)}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filtering={filtering} />
+      <Persons
+        persons={persons}
+        filtering={filtering}
+        handleDeletePerson={handleDeletePerson}
+      />
     </>
   );
 };

@@ -1,12 +1,15 @@
 import React from "react";
 
-const Persons = ({ persons, filtering }) => {
+const Persons = ({ persons, filtering, handleDeletePerson }) => {
   return (
     <>
       {filtering === ""
         ? persons.map((person) => (
             <p key={person.name}>
               {person.name} {person.number}
+              <button type="submit" onClick={() => handleDeletePerson(person.id)}>
+                delete
+              </button>
             </p>
           ))
         : persons
