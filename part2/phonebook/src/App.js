@@ -66,7 +66,7 @@ const App = () => {
   const addInfo = (e) => {
     e.preventDefault();
     const infoObject = { name: newName, number: newNumber };
-    const existingPerson = persons.find((x) => x.name === newName);
+    const existingPerson = { ...persons.find((x) => x.name === newName) };
     if (existingPerson) {
       const confirm = window.confirm(
         `${newName} is already added to phonebook, replace the old number with a new one?`
