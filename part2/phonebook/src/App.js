@@ -37,34 +37,46 @@ const App = () => {
     setNewNumber(number);
   };
 
-  const updateNumber = (id, newPerson) => {
-    personsService.update(id, newPerson);
+  const updateNumber = (id, existingPerson, newNumber) => {
+    existingPerson.number = newNumber;
+    return personsService
+      .update(id, existingPerson) // Send the data to the server to be updated
+      .then(() => { // if server responds OK, update local data aswell
+        const updatedPersons = [...persons];
+          updatedPersons.map((x) => {
+            if (x.name === existingPerson.name) {
+              x.number = newNumber;
+            }
+            return x;
+          });
+          setMessage(`${newName}'s number is changed`);
+          setTimeout(() => {
+            setMessage("");
+          }, 5000);
+          setPersons(updatedPersons);
+      })
+      .catch((err) => { // if server has an error, display the error message
+        setWarning(`${err.response.data.error}`);
+        setTimeout(() => {
+          setWarning("");
+        }, 5000);
+      });
   };
 
   const addInfo = (e) => {
     e.preventDefault();
     const infoObject = { name: newName, number: newNumber };
-
     const existingPerson = persons.find((x) => x.name === newName);
     if (existingPerson) {
       const confirm = window.confirm(
         `${newName} is already added to phonebook, replace the old number with a new one?`
       );
       if (confirm) {
-        existingPerson.number = newNumber;
-        const updatedPersons = [...persons];
-        updatedPersons.map((x) => {
-          if (x.name === newName) {
-            x.number = newNumber;
-          }
-          return x;
-        });
-        setMessage(`${newName}'s number is changed`);
-        setTimeout(() => {
-          setMessage("");
-        }, 5000);
-        setPersons(updatedPersons);
-        updateNumber(existingPerson.id, existingPerson);
+        // refactor code that all the updating happens inside the updateNumber function, 
+        // - updating the server
+        // - updating local if the server is fine
+        // - displaying error message
+        updateNumber(existingPerson.id, existingPerson, newNumber);
       }
     } else {
       personsService
@@ -78,7 +90,13 @@ const App = () => {
           setNewName("");
           setNewNumber("");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setWarning(`${err.response.data.error}`);
+          setTimeout(() => {
+            setWarning("");
+          }, 5000);
+          console.log(err);
+        });
     }
   };
 
