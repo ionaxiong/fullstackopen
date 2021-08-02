@@ -1,0 +1,19 @@
+.message {
+  color: green;
+  font-size: medium;
+  outline-style: solid;
+  background-color: lightgrey;
+  border-radius: 5px;
+  padding: 1rem;
+  margin: 0.5rem;
+}
+
+.warning {
+  color: red;
+  font-size: medium;
+  outline-style: solid;
+  background-color: lightgrey;
+  border-radius: 5px;
+  padding: 1rem;
+  margin: 0.5rem;
+}
