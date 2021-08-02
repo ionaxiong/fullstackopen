@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "author": "Daniel Kahneman",
+    "title": "Thinking, Fast and Slow",
+    "url": "http://thinkingfastandslow.com",
+    "likes": 123
+}
