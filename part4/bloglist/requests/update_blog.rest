@@ -1,9 +1,9 @@
-POST http://localhost:3003/api/blogs
+PUT http://localhost:3003/api/blogs/610842db7a79740798251ac2
 Content-Type: application/json
 
 {
     "author": "Harper Lee",
     "title": "To Kill a Mockingbird",
     "url": "http://tokillamockingbird.com",
-    "likes": 100
+    "likes": 20000
 }
