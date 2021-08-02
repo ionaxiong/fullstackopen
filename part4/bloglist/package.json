@@ -2,10 +2,10 @@
   "name": "bloglist",
   "version": "1.0.0",
   "description": "allow users to save information about blogs on the internet",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
