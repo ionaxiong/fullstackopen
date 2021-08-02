@@ -1,7 +1,7 @@
 {
   "name": "bloglist",
   "version": "1.0.0",
-  "description": "allow users to save information about blogs on the internet",
+  "description": "allow users to save, edit, and post information about blogs on the internet",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
