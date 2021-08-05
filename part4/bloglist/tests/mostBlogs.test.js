@@ -1,7 +1,7 @@
 const listHelper = require("../utils/list_helper");
 
 describe("most blogs", () => {
-  test("of a list of blogs, the author has the largest amount of blogs", () => {
+  test("of a list of multiple blogs", () => {
     const blogs = [
       {
         _id: "5a422a851b54a676234d17f7",

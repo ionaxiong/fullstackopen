@@ -37,15 +37,27 @@ const favoriteBlog = (blogs) => {
 };
 
 const mostBlogs = (blogs) => {
-  const author = _(blogs)
-    .countBy("author")
-    .entries()
-    .maxBy(_.last);
-  
+  const author = _(blogs).countBy("author").entries().maxBy(_.last);
+
   return {
     author: _.head(author),
-    blogs: _.last(author)
-  }
+    blogs: _.last(author),
+  };
+};
+
+const mostLikes = (blogs) => {
+  const blogsGroupdByAuthor = _.groupBy(blogs, "author");
+  const authorsWithLikes = _.map(blogsGroupdByAuthor, (authorInfo, author) => {
+    const totalLikes = authorInfo
+      .map((x) => x.likes)
+      .reduce((sum, likes) => sum + likes);
+    return {
+      author: author,
+      likes: totalLikes,
+    };
+  });
+  const authorWithMostLikes = _.maxBy(authorsWithLikes, "likes");
+  return authorWithMostLikes;
 };
 
 module.exports = {
@@ -53,4 +65,5 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
