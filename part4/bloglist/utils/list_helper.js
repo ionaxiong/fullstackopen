@@ -3,7 +3,7 @@ const dummy = (blogs) => {
 };
 
 const totalLikes = (blogs) => {
-  if (blogs.some((blog) => typeof(blog.likes) !== "number")) {
+  if (blogs.some((blog) => typeof blog.likes !== "number")) {
     throw "likes is not a number!";
   }
   if (blogs.length === 0) {
@@ -16,7 +16,26 @@ const totalLikes = (blogs) => {
   return likes;
 };
 
+const favoriteBlog = (blogs) => {
+  if (blogs.some((blog) => typeof blog.likes !== "number")) {
+    throw "likes is not a number!";
+  }
+  if (blogs.length === 0) {
+    return 0;
+  }
+  const likes = blogs.map((blog) => blog.likes);
+  const mostLikes = Math.max(...likes);
+  const mostLikedBlog = blogs.find((blog) => blog.likes === mostLikes);
+
+  return {
+    title: mostLikedBlog.title,
+    author: mostLikedBlog.author,
+    likes: mostLikedBlog.likes,
+  };
+};
+
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favoriteBlog,
 };
