@@ -12,7 +12,7 @@ beforeEach(async () => {
   await Promise.all(promiseArray);
 });
 
-describe("blog list tests", () => {
+describe("when there is initially some blogs saved", () => {
   test("all blogs are returned as json", async () => {
     await api
       .get("/api/blogs")
@@ -27,7 +27,9 @@ describe("blog list tests", () => {
       expect(blog.id).toBeDefined();
     });
   });
+});
 
+describe("addition of a new blog", () => {
   test("new blog can be created successfully", async () => {
     const newBlog = {
       title: "The Great Gatsby",
@@ -64,7 +66,37 @@ describe("blog list tests", () => {
 
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
-    expect(blogsAtEnd.find((blog) => blog.title === newBlog.title).likes).toBe(0);
+    expect(blogsAtEnd.find((blog) => blog.title === newBlog.title).likes).toBe(
+      0
+    );
+  });
+
+  test("creating new blogs via the /api/blogs endpoint", async () => {
+    const newBlog = {
+      author: "F. Scott Fitzgerald",
+      likes: 10,
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(400);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+  });
+});
+
+describe("deletion of a blog", () => {
+  test("succeeds with status code 204 if id is valid", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+
+    const titles = blogsAtEnd.map((b) => b.title);
+    expect(titles).not.toContain(blogToDelete.title);
   });
 });
 
