@@ -48,6 +48,24 @@ describe("blog list tests", () => {
     const titles = blogsAtEnd.map((b) => b.title);
     expect(titles).toContain("The Great Gatsby");
   });
+
+  test("default value of likes is 0", async () => {
+    const newBlog = {
+      title: "The Great Gatsby",
+      author: "F. Scott Fitzgerald",
+      url: "http://thegreatgatsby.com",
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+    expect(blogsAtEnd.find((blog) => blog.title === newBlog.title).likes).toBe(0);
+  });
 });
 
 afterAll(() => {
