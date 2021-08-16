@@ -23,9 +23,30 @@ describe("blog list tests", () => {
 
   test("unique identifier property of the blog posts is named id", async () => {
     const response = await api.get("/api/blogs");
-    response.body.forEach(blog => {
+    response.body.forEach((blog) => {
       expect(blog.id).toBeDefined();
-    })
+    });
+  });
+
+  test("new blog can be created successfully", async () => {
+    const newBlog = {
+      title: "The Great Gatsby",
+      author: "F. Scott Fitzgerald",
+      url: "http://thegreatgatsby.com",
+      likes: 10,
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+    const titles = blogsAtEnd.map((b) => b.title);
+    expect(titles).toContain("The Great Gatsby");
   });
 });
 
