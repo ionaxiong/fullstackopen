@@ -6,6 +6,11 @@ const blogSchema = new mongoose.Schema({
   title: {type: String, required: true, unique: true},
   url: {type: String, required: true, unique: true},
   likes: {type: Number, required: true},
+  //expand to contain info about the user who created it
+  user:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 blogSchema.plugin(uniqueValidator);
