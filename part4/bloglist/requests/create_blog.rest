@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmd4IiwiaWQiOiI2MTFiYWU3NzM1ZTg2NjQ1YmMwNGEyZjQiLCJpYXQiOjE2MjkyMDYzMDV9.iacpj9FSx0hRPcrJbHmaoBbW6rFeQq4ibheOn2lWZgA
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmd4IiwiaWQiOiI2MTFiYWU3NzM1ZTg2NjQ1YmMwNGEyZjQiLCJpYXQiOjE2Mjk0MDMwODgsImV4cCI6MTYyOTQwNjY4OH0.gQwvTBadTL7f8Nx9Jl71wQ_T86n4tYjr9DGybXegQwM
 
 {
     "author": "F. Scott Fitzgerald",

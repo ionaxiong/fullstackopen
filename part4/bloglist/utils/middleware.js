@@ -1,5 +1,4 @@
 const logger = require("./logger");
-const jwt = require("jsonwebtoken");
 
 const requestLogger = (request, response, next) => {
   logger.info("Method", request.method);
@@ -35,19 +34,14 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
+//https://openclassrooms.com/en/courses/5614116-go-full-stack-with-node-js-express-and-mongodb/5656301-set-up-authentication-middleware
 const tokenExtractor = (request, response, next) => {
-  const authorization = request.get("authorization");
+  const authorization = request.headers.authorization;
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     const token = authorization.substring(7);
-    const decodedToken = jwt.verify(request.token, process.env.SECRET);
-    if (!token || !decodedToken.id) {
-      return response.status(401).json({ error: "token missing or invalid" });
-    } else {
-      next();
-    }
-  } else {
-    return response.status(401).json({ error: "token missing or invalid" });
+    request.token = token;
   }
+  next();
 };
 
 module.exports = {
