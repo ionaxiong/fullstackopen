@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmd4IiwiaWQiOiI2MTFiYWU3NzM1ZTg2NjQ1YmMwNGEyZjQiLCJpYXQiOjE2Mjk0MDMwODgsImV4cCI6MTYyOTQwNjY4OH0.gQwvTBadTL7f8Nx9Jl71wQ_T86n4tYjr9DGybXegQwM
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmd4IiwiaWQiOiI2MTFiYWU3NzM1ZTg2NjQ1YmMwNGEyZjQiLCJpYXQiOjE2Mjk0NTczOTMsImV4cCI6MTYyOTQ2MDk5M30.v9IE44VpYOILUjX7CTxpw32jx49Il2Ivb6fGzLVfAPM
 
 {
-    "author": "F. Scott Fitzgerald",
-    "title": "The Great Gatsby",
-    "url": "http://thegreatgatsby.com",
-    "likes": 10
+    "author": "great hello",
+    "title": "The Great hello",
+    "url": "http://thegreathello.com",
+    "likes": 123
 }

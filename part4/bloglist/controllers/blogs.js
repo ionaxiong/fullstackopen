@@ -30,13 +30,13 @@ blogsRouter.get("/:id", async (request, response, next) => {
 //post blog, refactored
 blogsRouter.post("/", async (request, response, next) => {
   const body = request.body;
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-
-  if (!request.token || !decodedToken.id) {
+  // const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  if (!request.token || !request.user) {
     return response.status(401).json({ error: "token missing or invalid" });
   }
-  const user = await User.findById(decodedToken.id);
-
+  // const user = await User.findById(decodedToken.id);
+  const user = request.user;
+// console.log("user in controller----------",user.id)
   const blog = new Blog({
     author: body.author,
     title: body.title,
@@ -54,9 +54,9 @@ blogsRouter.post("/", async (request, response, next) => {
 
 //delete blog, refactored
 blogsRouter.delete("/:id", async (request, response, next) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  console.log(request)
-  const user = await User.findById(decodedToken.id);
+  // const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  // console.log(request)
+  const user = request.user;
   const userId = await user.id;
   const blog = await Blog.findById(request.params.id);
 
@@ -64,7 +64,7 @@ blogsRouter.delete("/:id", async (request, response, next) => {
     await Blog.findByIdAndRemove(request.params.id);
     response.status(204).end();
   } else {
-    response.status(401).json({error: "wrong user"})
+    response.status(401).json({ error: "wrong user" });
   }
   // if (!request.token || !decodedToken.id) {
   //   response.status(401).json({ error: "token missing or invalid" });
