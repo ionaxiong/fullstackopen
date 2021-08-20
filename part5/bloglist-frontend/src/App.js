@@ -6,7 +6,7 @@ import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [newBlog, setNewBlog] = useState("");
+  // const [newBlog, setNewBlog] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,41 +16,79 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("logging in with", username, password);
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      });
+      blogService.setToken(user.token);
+      setUser(user);
+      setUsername("");
+      setPassword("");
+    } catch (exception) {
+      setErrorMessage("Wrong credentials");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
   };
+
+  // const handleLogout = async (e) => {
+  //   e.preventDefault();
+  //   await setUser(null);
+  // };
+
+  // const handleBlogChange = async (e) => {};
+
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
+      <div>
+        username
+        <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={({ target }) => setUsername(target.value)}
+        ></input>
+      </div>
+      <div>
+        password
+        <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        ></input>
+      </div>
+      <button type="submit">login</button>
+    </form>
+  );
+
+  // const blogFrom = () => {
+  //   <form onSubmit={addBlog}>
+  //     <input value={newBlog} onChange={handleBlogChange} />
+  //     <button type="submit">save</button>
+  //   </form>;
+  // };
 
   return (
     <div>
-      <h2>Blogs</h2>
-      <Notification errorMessage={errorMessage} />
-
-      <form onSubmit={handleLogin}>
+      <h1>Blogs</h1>
+      <Notification message={errorMessage} />
+      {console.log(user)}
+      {user === null ? (
+        loginForm()
+      ) : (
         <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          ></input>
+          <p> {user.name} logged-in </p>
+          {/* {blogFrom()} */}
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
         </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          ></input>
-        </div>
-        <button type="submit">login</button>
-      </form>
-
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      )}
     </div>
   );
 };
