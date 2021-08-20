@@ -59,7 +59,7 @@ describe("addition of a new blog", () => {
 
     await api
       .post("/api/blogs")
-      .auth(token, {type: "bearer"})
+      .auth(token, { type: "bearer" })
       .send(newBlog)
       .expect(200)
       .expect("Content-Type", /application\/json/);
@@ -72,6 +72,11 @@ describe("addition of a new blog", () => {
   });
 
   test("default value of likes is 0", async () => {
+    const response = await api
+      .post("/api/login")
+      .send({ username: "mingx", password: "hello" });
+    const token = response.body.token;
+
     const newBlog = {
       title: "The Great Gatsby",
       author: "F. Scott Fitzgerald",
@@ -80,6 +85,7 @@ describe("addition of a new blog", () => {
 
     await api
       .post("/api/blogs")
+      .auth(token, { type: "bearer" })
       .send(newBlog)
       .expect(200)
       .expect("Content-Type", /application\/json/);
@@ -92,12 +98,21 @@ describe("addition of a new blog", () => {
   });
 
   test("creating new blogs via the /api/blogs endpoint", async () => {
+    const response = await api
+      .post("/api/login")
+      .send({ username: "mingx", password: "hello" });
+    const token = response.body.token;
+
     const newBlog = {
       author: "F. Scott Fitzgerald",
       likes: 10,
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .auth(token, { type: "bearer" })
+      .send(newBlog)
+      .expect(400);
 
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
@@ -106,10 +121,18 @@ describe("addition of a new blog", () => {
 
 describe("deletion of a blog", () => {
   test("succeeds with status code 204 if id is valid", async () => {
+    const response = await api
+      .post("/api/login")
+      .send({ username: "mingx", password: "hello" });
+    const token = response.body.token;
+
     const blogsAtStart = await helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .auth(token, { type: "bearer" })
+      .expect(204);
 
     const blogsAtEnd = await helper.blogsInDb();
 
