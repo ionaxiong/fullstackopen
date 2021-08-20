@@ -39,6 +39,7 @@ const errorHandler = (error, request, response, next) => {
 //https://openclassrooms.com/en/courses/5614116-go-full-stack-with-node-js-express-and-mongodb/5656301-set-up-authentication-middleware
 const tokenExtractor = (request, response, next) => {
   const authorization = request.headers.authorization;
+  console.log("tokenextractor.authorization", authorization)
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     const token = authorization.substring(7);
     request.token = token;
@@ -47,12 +48,14 @@ const tokenExtractor = (request, response, next) => {
 };
 
 const userExtractor = async (request, response, next) => {
-  const decodedToken = jwt.verify(
-    request.token,
-    process.env.SECRET
-  );
-  const user = await User.findById(decodedToken.id);
-  request.user = user;
+  if (request.token) {
+    const decodedToken = jwt.verify(
+      request.token,
+      process.env.SECRET
+    );
+    const user = await User.findById(decodedToken.id);
+    request.user = user;
+  }
   next()
 };
 

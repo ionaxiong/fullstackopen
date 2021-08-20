@@ -7,11 +7,23 @@ const app = require("../app");
 const api = supertest(app);
 
 const Blog = require("../models/blog");
+
 beforeEach(async () => {
+  //recreate users
+  await User.deleteMany({});
+  let userObjects = helper.initialUsers.map((user) => new User(user));
+  const promiseUserArray = userObjects.map((u) => u.save());
+  await Promise.all(promiseUserArray);
+
+  //recreate blogs
   await Blog.deleteMany({});
   let blogObjects = helper.initialBlogs.map((blog) => new Blog(blog));
-  const promiseArray = blogObjects.map((b) => b.save());
-  await Promise.all(promiseArray);
+  blogObjects[0].user = await User.findOne({ username: "mingx" });
+  blogObjects[1].user = await User.findOne({ username: "mingx" });
+  blogObjects[2].user = await User.findOne({ username: "root" });
+
+  const promiseBlogArray = blogObjects.map((b) => b.save());
+  await Promise.all(promiseBlogArray);
 });
 
 describe("when there is initially some blogs saved", () => {
@@ -33,6 +45,11 @@ describe("when there is initially some blogs saved", () => {
 
 describe("addition of a new blog", () => {
   test("new blog can be created successfully", async () => {
+    const response = await api
+      .post("/api/login")
+      .send({ username: "mingx", password: "hello" });
+    const token = response.body.token;
+
     const newBlog = {
       title: "The Great Gatsby",
       author: "F. Scott Fitzgerald",
@@ -42,6 +59,7 @@ describe("addition of a new blog", () => {
 
     await api
       .post("/api/blogs")
+      .auth(token, {type: "bearer"})
       .send(newBlog)
       .expect(200)
       .expect("Content-Type", /application\/json/);

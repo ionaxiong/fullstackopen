@@ -1,5 +1,5 @@
 const Blog = require("../models/blog");
-const User = require("../models/user")
+const User = require("../models/user");
 
 const initialBlogs = [
   {
@@ -7,18 +7,39 @@ const initialBlogs = [
     title: "Foundation",
     url: "http://foundation.com",
     likes: 1000,
+    user: null
+    // user: initialUsers[0], 
   },
   {
     author: "Daniel Kahneman",
     title: "Thinking, Fast and Slow",
     url: "http://thinkingfastandslow.com",
     likes: 123,
+    user: null
+    // user: initialUsers[0],
   },
   {
     author: "Harper Lee",
     title: "To Kill a Mockingbird",
     url: "http://tokillamockingbird.com",
     likes: 100,
+    user: null
+    // user: initialUsers[1],
+  },
+];
+
+const initialUsers = [
+  {
+    username: "mingx",
+    passwordHash: "$2b$10$apTnGgN15m.yAlKQTStNUeI1IqGG6imronfdU1FXuPBtfuP0eJ9bm",
+    blogs: []
+    // blogs: [initialBlogs[0], initialBlogs[1]],
+  },
+  {
+    username: "root",
+    passwordHash: "$2b$10$f96RMBAFp8wyF88l28iBSO9ditDyIS56O3hOjAUehW2DTqhFEesMe",
+    blogs: []
+    // blogs: [initialBlogs[2]],
   },
 ];
 
@@ -40,12 +61,13 @@ const blogsInDb = async () => {
 };
 
 const usersInDb = async () => {
-  const users = await User.find({})
+  const users = await User.find({});
   return users;
-}
+};
 
 module.exports = {
   initialBlogs,
+  initialUsers,
   nonExistingId,
   blogsInDb,
   usersInDb,
