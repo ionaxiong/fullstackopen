@@ -39,7 +39,6 @@ const errorHandler = (error, request, response, next) => {
 //https://openclassrooms.com/en/courses/5614116-go-full-stack-with-node-js-express-and-mongodb/5656301-set-up-authentication-middleware
 const tokenExtractor = (request, response, next) => {
   const authorization = request.headers.authorization;
-  console.log("tokenextractor.authorization", authorization)
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     const token = authorization.substring(7);
     request.token = token;

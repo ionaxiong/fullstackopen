@@ -223,6 +223,22 @@ describe("when there is initially one user in db", () => {
   });
 });
 
+describe("unauthorized operation", () => {
+  test("creation of a blog fails with status code 401", async () => {
+    const newBlog = {
+      title: "The Great Gatsby",
+      author: "F. Scott Fitzgerald",
+      url: "http://thegreatgatsby.com",
+      likes: 10,
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(401);
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
