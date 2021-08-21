@@ -17,9 +17,6 @@ const App = () => {
   const [user, setUser] = useState(null);
   //blog attributes
   const [blogs, setBlogs] = useState([]);
-  const [author, setAuthor] = useState("");
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -76,42 +73,49 @@ const App = () => {
     setUser(null);
   };
 
-  const addBlog = async (e) => {
-    e.preventDefault();
+  // const addBlog = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const blog = await blogService.create({
+  //       author,
+  //       title,
+  //       url,
+  //     });
+  //     setBlogs([...blogs, blog]);
+  //     setSuccessMessage(`a new blog ${blog.title}! by ${blog.author} added `);
+  //     setTimeout(() => {
+  //       setSuccessMessage(null);
+  //     }, 5000);
+  //     setAuthor("");
+  //     setTitle("");
+  //     setUrl("");
+  //   } catch (exception) {
+  //     setErrorMessage(exception.response.data.error);
+  //     setTimeout(() => {
+  //       setErrorMessage(null);
+  //     }, 5000);
+  //   }
+  // };
+
+  const createBlog = async (blog) => {
     try {
-      const blog = await blogService.create({
-        author,
-        title,
-        url,
-      });
-      setBlogs([...blogs, blog]);
+      const newBlog = await blogService.create(blog);
+      setBlogs([...blogs, newBlog]);
       setSuccessMessage(`a new blog ${blog.title}! by ${blog.author} added `);
       setTimeout(() => {
         setSuccessMessage(null);
       }, 5000);
-      setAuthor("");
-      setTitle("");
-      setUrl("");
     } catch (exception) {
       setErrorMessage(exception.response.data.error);
       setTimeout(() => {
         setErrorMessage(null);
       }, 5000);
-      console.log(exception);
     }
   };
 
   const blogFrom = () => (
     <Togglable buttonLabel="new blog">
-      <BlogForm
-        addBlog={addBlog}
-        title={title}
-        handleTitleChange={({ target }) => setTitle(target.value)}
-        author={author}
-        handleAuthorChange={({ target }) => setAuthor(target.value)}
-        url={url}
-        handleUrlChange={({ target }) => setUrl(target.value)}
-      />
+      <BlogForm createBlog={createBlog} />
     </Togglable>
   );
 
