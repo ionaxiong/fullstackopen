@@ -1,7 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
-const BlogForm = ({createBlog}) => {
-
+const BlogForm = ({ createBlog }) => {
   const [author, setAuthor] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -12,15 +11,15 @@ const BlogForm = ({createBlog}) => {
       author: author,
       title: title,
       url: url,
-    })
-    setAuthor("")
-    setTitle("")
-    setUrl("")
-  }
+    });
+    setAuthor("");
+    setTitle("");
+    setUrl("");
+  };
 
   return (
     <div>
-        <h2>Create a new blog</h2>
+      <h2>Create a new blog</h2>
       <form onSubmit={addBlog}>
         <div>
           title:

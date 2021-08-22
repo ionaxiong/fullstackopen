@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -11,6 +11,7 @@ import BlogForm from "./components/BlogForm";
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const noteFormRef = useRef();
   //user attributes
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -73,30 +74,6 @@ const App = () => {
     setUser(null);
   };
 
-  // const addBlog = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const blog = await blogService.create({
-  //       author,
-  //       title,
-  //       url,
-  //     });
-  //     setBlogs([...blogs, blog]);
-  //     setSuccessMessage(`a new blog ${blog.title}! by ${blog.author} added `);
-  //     setTimeout(() => {
-  //       setSuccessMessage(null);
-  //     }, 5000);
-  //     setAuthor("");
-  //     setTitle("");
-  //     setUrl("");
-  //   } catch (exception) {
-  //     setErrorMessage(exception.response.data.error);
-  //     setTimeout(() => {
-  //       setErrorMessage(null);
-  //     }, 5000);
-  //   }
-  // };
-
   const createBlog = async (blog) => {
     try {
       const newBlog = await blogService.create(blog);
@@ -114,7 +91,7 @@ const App = () => {
   };
 
   const blogFrom = () => (
-    <Togglable buttonLabel="new blog">
+    <Togglable buttonLabel="new blog" ref={noteFormRef}>
       <BlogForm createBlog={createBlog} />
     </Togglable>
   );
