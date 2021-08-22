@@ -11,13 +11,14 @@ import BlogForm from "./components/BlogForm";
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const noteFormRef = useRef();
   //user attributes
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   //blog attributes
   const [blogs, setBlogs] = useState([]);
+
+  const noteFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -76,6 +77,7 @@ const App = () => {
 
   const createBlog = async (blog) => {
     try {
+      noteFormRef.current.toggleVisibility();
       const newBlog = await blogService.create(blog);
       setBlogs([...blogs, newBlog]);
       setSuccessMessage(`a new blog ${blog.title}! by ${blog.author} added `);
@@ -112,9 +114,9 @@ const App = () => {
           </button>
           {blogFrom()}
           <br />
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
+            {blogs.map((blog) => (
+              <Blog key={blog.id} blog={blog} />
+            ))}
         </div>
       )}
     </div>
