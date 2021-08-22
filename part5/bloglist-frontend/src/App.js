@@ -115,6 +115,26 @@ const App = () => {
     }
   };
 
+  const handleDeleteBlog = async (blog) => {
+    try {
+      const id = blog.id;
+      console.log(id, blog)
+      const response = await blogService.remove(id);
+      console.log(response);
+      const updatedBlogs = blogs.filter((b) => b.id !== id);
+      setBlogs(updatedBlogs);
+      setSuccessMessage(`Remove blog ${blog.title}! by ${blog.author}`);
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+    } catch (exception) {
+      setErrorMessage(exception.response.data.error);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
   const blogFrom = () => (
     <Togglable buttonLabel="new blog" ref={noteFormRef}>
       <BlogForm createBlog={createBlog} />
@@ -136,9 +156,16 @@ const App = () => {
           </button>
           {blogFrom()}
           <br />
-          {blogs.sort((a, b) => b.likes - a.likes).map((blog) => (
-            <Blog key={blog.id} blog={blog} handleLike={handleLike} />
-          ))}
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                handleLike={handleLike}
+                handleDeleteBlog={handleDeleteBlog}
+              />
+            ))}
         </div>
       )}
     </div>
