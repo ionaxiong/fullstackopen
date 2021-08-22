@@ -4,7 +4,6 @@ const BlogForm = ({ createBlog }) => {
   const [author, setAuthor] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
-  const [likes, setLikes] = useState(0);
 
   const addBlog = async (e) => {
     e.preventDefault();
@@ -12,7 +11,7 @@ const BlogForm = ({ createBlog }) => {
       author: author,
       title: title,
       url: url,
-      likes: likes,
+      likes: 0,
     });
     setAuthor("");
     setTitle("");

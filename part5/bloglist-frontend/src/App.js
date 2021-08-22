@@ -26,7 +26,6 @@ const App = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
-    console.log(loggedUserJSON);
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
@@ -92,6 +91,30 @@ const App = () => {
     }
   };
 
+  const handleLike = async (blog) => {
+    try {
+      const newBlog = {
+        ...blog,
+        likes: blog.likes + 1,
+      };
+      const id = blog.id;
+      const updatedBlog = await blogService.update(id, newBlog); // update single blog
+      const blogIndex = blogs.findIndex((b) => b.id === id); // find blog in array to update
+      const updatedBlogs = [...blogs]; // copy blogs to make react rerender
+      updatedBlogs[blogIndex] = updatedBlog; // update blog at index
+      setBlogs(updatedBlogs); // set blog state
+      setSuccessMessage(`you liked ${blog.title}! by ${blog.author}`);
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+    } catch (exception) {
+      setErrorMessage(exception.response.data.error);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
   const blogFrom = () => (
     <Togglable buttonLabel="new blog" ref={noteFormRef}>
       <BlogForm createBlog={createBlog} />
@@ -103,7 +126,6 @@ const App = () => {
       <h1>Blogs</h1>
       <Warning message={errorMessage} />
       <Notification message={successMessage} />
-      {console.log(user)}
       {user === null ? (
         loginForm()
       ) : (
@@ -114,9 +136,9 @@ const App = () => {
           </button>
           {blogFrom()}
           <br />
-            {blogs.map((blog) => (
-              <Blog key={blog.id} blog={blog} />
-            ))}
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+          ))}
         </div>
       )}
     </div>
