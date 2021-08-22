@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import PropTypes from 'prop-types'
 
 const LoginForm = (props) => {
@@ -12,7 +12,7 @@ const LoginForm = (props) => {
 
   return (
     <div>
-        <h2>Login</h2>
+      <h2>Login</h2>
       <form onSubmit={props.handleLogin}>
         <div>
           username
@@ -35,7 +35,7 @@ const LoginForm = (props) => {
         <button type="submit">login</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
 const Blog = ({ blog, handleLike, handleDeleteBlog }) => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false)
 
-  const hideWhenVisible = { display: visible ? "none" : "" };
-  const showWhenInvisible = { display: visible ? "" : "none" };
+  const hideWhenVisible = { display: visible ? 'none' : '' }
+  const showWhenInvisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
 
   return (
     <div className="blogStyle">
@@ -21,10 +21,10 @@ const Blog = ({ blog, handleLike, handleDeleteBlog }) => {
         <span> {blog.url} </span><br/>
         <span> likes {blog.likes} <button onClick={() => handleLike(blog)} >like</button></span><br/>
         <span> {blog.author} </span><br/>
-        <button style={{color: "blue"}} onClick={() => handleDeleteBlog(blog)} >remove</button>
+        <button style={{ color: 'blue' }} onClick={() => handleDeleteBlog(blog)} >remove</button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog
