@@ -118,15 +118,15 @@ const App = () => {
   const handleDeleteBlog = async (blog) => {
     try {
       const id = blog.id;
-      console.log(id, blog)
-      const response = await blogService.remove(id);
-      console.log(response);
-      const updatedBlogs = blogs.filter((b) => b.id !== id);
-      setBlogs(updatedBlogs);
-      setSuccessMessage(`Remove blog ${blog.title}! by ${blog.author}`);
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 5000);
+      if (window.confirm(`Remove blog ${blog.title}! by ${blog.author}`)) {
+        await blogService.remove(id);
+        const updatedBlogs = blogs.filter((b) => b.id !== id);
+        setBlogs(updatedBlogs);
+        setSuccessMessage(`Remove blog ${blog.title}! by ${blog.author}`);
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 5000);
+      }
     } catch (exception) {
       setErrorMessage(exception.response.data.error);
       setTimeout(() => {
